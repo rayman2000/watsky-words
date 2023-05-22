@@ -1,11 +1,13 @@
 import System.Environment
+import Data.Set qualified as Set
+
 main = do
-  args <- getArgs  
+  args <- getArgs
   let sylLength = read (head args) :: Int
   let numWords = read (args !! 1) :: Int
   let fileName = args !! 2
   words <- readFile fileName
-  print (generalWatskyWords sylLength numWords (lines words))
+  mapM print (Set.toList (Set.fromList (generalWatskyWords sylLength numWords (lines words))))
 
 generalWatskyWords :: Int -> Int -> [String] -> [[String]]
 generalWatskyWords sylLength numWords words =
@@ -34,10 +36,3 @@ checkWord sylLength numWords currentWords word =
 
 getSubstring :: Int -> Int -> String -> String
 getSubstring start end str = take (end - start) (drop start str)
-
-
---watskyWords :: [String] -> [[String]]
---watskyWords words =
---  let singleLengthWords = filter (\s -> length s == 9) words
---   in [ [first, second, third] | first <- singleLengthWords, second <- singleLengthWords, first /= second, getSubstring 3 6 first == getSubstring 0 3 second, third <- singleLengthWords, second /= third, first /= third, getSubstring 0 3 third == getSubstring 6 9 first, getSubstring 3 6 third == getSubstring 6 9 second
---      ]
